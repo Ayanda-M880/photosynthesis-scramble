@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photosynthesis Puzzle Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('photosynthesis.jpeg'); /* Add your background image URL */
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+
+        .game-container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .scrambled-word {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .badge img {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Photosynthesis Scramble Game</h1>
+<p>Unscramble the scrambled letters to correctly spell out terms related to photosynthesis. You’ll be presented with one scrambled word at a time, and your task is to guess the correct word.</p>
+<p>After you successfully unscramble all five words, you’ll earn a special <b>Photosynthesis Scramble Master Badge</b> to celebrate your accomplishment</p>
+<h2><b> Scramble the word: </b></h2>
+        <div class="scrambled-word" id="scrambledWord"></div>
+        <input type="text" id="guessInput" placeholder="Enter your guess">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <div id="feedback"></div>
+        <div class="badge" id="badge">
+            <h2>Congratulations! You earned a badge!</h2>
+            <img src="badge.png" alt="Badge"> <!-- Add your badge image URL -->
+        </div>
+    </div>
+
+    <script>
+        const terms = ["chlorophyll", "stomata", "light", "glucose", "oxygen"];
+        const scrambledTerms = terms.map(term => scrambleWord(term));
+        let currentTermIndex = 0;
+
+        function scrambleWord(word) {
+            let scrambled = word.split('');
+            for (let i = scrambled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [scrambled[i], scrambled[j]] = [scrambled[j], scrambled[i]];
+            }
+            return scrambled.join('');
+        }
+
+        function displayNextScrambledWord() {
+            if (currentTermIndex < scrambledTerms.length) {
+                document.getElementById('scrambledWord').innerText = scrambledTerms[currentTermIndex];
+            } else {
+                document.getElementById('feedback').innerText = "You completed all terms!";
+                document.getElementById('badge').style.display = 'block';
+            }
+        }
+
+        function checkGuess() {
+            const guess = document.getElementById('guessInput').value.toLowerCase();
+            const correctTerm = terms[currentTermIndex];
+            
+            if (guess === correctTerm) {
+                document.getElementById('feedback').innerText = "Correct!";
+                currentTermIndex++;
+                displayNextScrambledWord();
+            } else {
+                document.getElementById('feedback').innerText = "Try again!";
+            }
+
+            document.getElementById('guessInput').value = '';  // Clear input after guess
+        }
+
+        // Initialize the game
+        displayNextScrambledWord();
+    </script>
+</body>
+</html>
